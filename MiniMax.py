@@ -2,6 +2,8 @@ import math
 from Node import Node
 from random import randint
 
+from State import State
+
 
 class MiniMax:
     def __init__(self, playerValue: int, maxTreeDepth: int):
@@ -9,11 +11,6 @@ class MiniMax:
         self.player = playerValue
         self.maxTreeDepth = maxTreeDepth
         self.minimaxTree = None
-
-    # def __init__(self, is_minimizer: bool, playerValue: int, maxTreeDepth: int):
-    #     self.agentFunction = self.get_next_min_State if is_minimizer else self.get_next_max_State
-    #     self.player = playerValue
-    #     self.maxTreeDepth = maxTreeDepth
 
     def get_next_state(self, state):
         return self.agentFunction(state)
@@ -23,17 +20,21 @@ class MiniMax:
 
         maxStateValue = float('-inf')
         maxState = None
+        self.minimaxTree = Node(randint(1, 10000), 0, [])
 
         for successor in successors:
-            value = self.max_value(successor, self.maxTreeDepth)
-            print(value)
-            if value > maxStateValue:
+            successorNode = Node(randint(1, 10000), 0, [])
+            self.minimaxTree.children.append(successorNode)
+
+            successorNodeMinValue = self.max_value(successor, self.maxTreeDepth, successorNode)
+
+            if successorNodeMinValue > maxStateValue:
                 maxState = successor
-                maxStateValue = value
+                maxStateValue = successorNodeMinValue
 
         return maxState
 
-    def get_next_min_State(self, state):
+    def get_next_min_State(self, state: State):
         successors = state.get_neighbors()
 
         minStateValue = float('inf')
@@ -42,81 +43,80 @@ class MiniMax:
     
         for successor in successors:
 
-            node = Node(randint(1, 10000), 0, [])
-            self.minimaxTree.children.append(node)
+            successorNode = Node(randint(1, 10000), 0, [])
+            self.minimaxTree.children.append(successorNode)
 
-            value = self.max_value(successor, self.maxTreeDepth, node)
-            node.value = value
+            successorNodeMaxValue = self.max_value(successor, self.maxTreeDepth, successorNode)
 
-            if value < minStateValue:
+            if successorNodeMaxValue < minStateValue:
                 minState = successor
-                minStateValue = value
-                # successor.print_connect_4_board()
+                minStateValue = successorNodeMaxValue
 
         self.minimaxTree.value = minStateValue
         return minState
     
 
-    def max_value(self, state, level, node):
-        value = float('-inf')
+    def max_value(self, state: State, level: int, maximizerNode: Node):
+        maximizerNode.value = float('-inf')
 
         if level == 0:
-            value = state.get_heuristic()
-            node.value = value
-            return value
+            maximizerNode.value = state.get_heuristic()
+            return maximizerNode.value
 
         successors = state.get_neighbors()
 
         if len(successors) == 0:
-            value = state.get_utility()
+            maximizerNode.value = state.get_utility()
 
+        tempValue = maximizerNode.value
         for successor in successors:
             successorNode = Node(randint(1, 10000), 0, [])
-            node.children.append(successorNode)
-            successorNodeMaxValue = self.min_value(successor, level - 1, successorNode)
-            successorNode.value = successorNodeMaxValue
-            value = max(value, successorNodeMaxValue)
-            successorNode.value = value
+            maximizerNode.children.append(successorNode)
+            successorNodeMinValue = self.min_value(successor, level-1, successorNode)
+            tempValue = max(tempValue, successorNodeMinValue)
+        maximizerNode.value = tempValue
 
-        return value
+        return maximizerNode.value
 
-    def min_value(self, state, level, node):
-        value = float('inf')
+
+    def min_value(self, state: State, level: int, minimzerNode: Node):
+        minimzerNode.value = float('inf')
 
         if level == 0:
-            value = state.get_heuristic()
-            node.value = value
-            return value
-
+            minimzerNode.value = state.get_heuristic()
+            return minimzerNode.value
 
         successors = state.get_neighbors()
 
         if len(successors) == 0:
-            value = state.get_utility()
+            minimzerNode.value = state.get_utility()
 
+        tempValue = minimzerNode.value
         for successor in successors:
             successorNode = Node(randint(1, 10000), 0, [])
-            node.children.append(successorNode)
+            minimzerNode.children.append(successorNode)
             successorNodeMaxValue = self.max_value(successor, level - 1, successorNode)
-            successorNode.value = successorNodeMaxValue
-            value = min(value, successorNodeMaxValue)
-        
-        return value
+            tempValue = min(tempValue, successorNodeMaxValue)
+        minimzerNode.value = tempValue
+
+        return minimzerNode.value
     
     def getMiniMaxTree(self):
-        print(self.minimaxTree.value)
+        self.__file = open("mmtree.txt", "w")
+        self.__file.write(str(self.minimaxTree.value) + '\n')
         for successor in self.minimaxTree.children:
             self.__getMiniMaxTree(successor, 1)
+        self.__file.close()
 
     def __getMiniMaxTree(self, node, level):
-        print("\t" * level, end='')
-        print(node.value)
+        self.__file.write("|   " * (level-1) + "|___")
+        self.__file.write(str(node.value) + '\n')
 
         if len(node.children[0].children) == 0:
-            print("\t" * (level + 1), end='')
+            self.__file.write("|   " * (level) + "|___")
             for child in node.children:
-                print(child.value, end=' ')
-            print()
+                self.__file.write(str(child.value) + " ")
+            self.__file.write('\n')
         else:
             for child in node.children:
                 self.__getMiniMaxTree(child, level + 1)
