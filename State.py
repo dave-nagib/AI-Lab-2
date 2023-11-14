@@ -1,5 +1,5 @@
-ROWS = 7
-COLS = 6
+ROWS = 6
+COLS = 7
 
 
 class State:
@@ -14,8 +14,8 @@ class State:
         return self.__chains1[3] - self.__chains2[3]
 
     def get_slot(self,i,j):
-        if i*ROWS+j in range(0, ROWS*COLS):
-            return self.__board[i*ROWS+j]
+        if i*COLS+j in range(0, ROWS*COLS):
+            return self.__board[i*COLS+j]
         else:
             return None
 
@@ -26,14 +26,14 @@ class State:
         # If the column is full, return None
         if row == -1: return None
         # Get the new state's string
-        newBoard = self.__board[: row * ROWS + col] + str(self.__nextTurn) + self.__board[row * ROWS + col + 1:]
+        newBoard = self.__board[: row * COLS + col] + str(self.__nextTurn) + self.__board[row * COLS + col + 1:]
         newState = State(newBoard, self.__chains1.copy(), self.__chains2.copy(), 3 - self.__nextTurn)
         newState.__update_chains(row, col, str(self.__nextTurn))
         return newState
 
     def get_neighbors(self):
         neighbors = []
-        for choice in range(0, ROWS):
+        for choice in range(0, COLS):
             neighbor = self.move_state(choice)
             if neighbor: neighbors.append(neighbor)
         return neighbors
@@ -149,10 +149,10 @@ class State:
         return h
 
     def print_connect_4_board(self):
-        if len(self.__board) != 42:
+        if len(self.__board) != ROWS*COLS:
             raise ValueError("Input string must be of size 42 for a 6x7 Connect 4 board.")
 
-        for row in range(0, 6):
-            for col in range(0, 7):
-                print(self.__board[row * 7 + col], end=" ")
+        for row in range(0, ROWS):
+            for col in range(0, COLS):
+                print(self.__board[row * COLS + col], end=" ")
             print()
