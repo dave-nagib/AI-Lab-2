@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QGr
 
 from Connect4_GUI import Connect4Grid
 from MiniMax import MiniMax
-from MiniMaxWithPruniing import MiniMaxWithPruning
+from MiniMaxWithPruning import MiniMaxWithPruning
 from State import State
 
 

@@ -18,4 +18,5 @@ while True:
     state.print_connect_4_board()
     print()
     state = minimax.get_next_state(state)
+    minimax.getMiniMaxTree()
     
