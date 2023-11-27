@@ -10,6 +10,9 @@ class State:
         self.__chains2 = chainCounts2
         self.__nextTurn = nextTurn
 
+    def get_board(self):
+        return self.__board
+
     def get_utility(self):
         return self.__chains1[3] - self.__chains2[3]
 
@@ -28,6 +31,7 @@ class State:
         # Get the new state's string
         newBoard = self.__board[: row * COLS + col] + str(self.__nextTurn) + self.__board[row * COLS + col + 1:]
         newState = State(newBoard, self.__chains1.copy(), self.__chains2.copy(), 3 - self.__nextTurn)
+        # Update chain counts of each player
         newState.__update_chains(row, col, str(self.__nextTurn))
         return newState
 
@@ -62,7 +66,7 @@ class State:
             row, col = x + offsetRow, y + offsetCol
             slot = self.get_slot(row, col)
 
-            # Touching piece of the proponent
+            # Touching piece is a proponent piece
             if slot == pieceP:
                 # Count the chain length of the proponent
                 while slot == pieceP:
@@ -76,9 +80,9 @@ class State:
                     chainsP[chainLenF - 1] -= 1  # 1 <= length <= 4
                 else:
                     chainsP[3] -= 4 * (chainLenF - 3)  # length > 4
-            # Touching piece of the opponent
+            # Touching piece is an oponent piece
             elif slot == pieceO:
-                # The proponent chain stops with boundary of opponent piece
+                # The current proponent chain stops with boundary of opponent piece
                 boundaryF = pieceO
                 # Count the chain length of the opponent
                 chainO = 0
@@ -99,7 +103,7 @@ class State:
             row, col = x - offsetRow, y - offsetCol
             slot = self.get_slot(row, col)
 
-            # Touching piece of the proponent
+            # Touching piece is a proponent piece
             if slot == pieceP:
                 # Count the chain length of the proponent
                 while slot == pieceP:
@@ -108,14 +112,14 @@ class State:
                     slot = self.get_slot(row, col)
                 # Remember the boundary on which we stopped
                 boundaryB = slot
-                # Subtract the old chain's length that is touching the slot in the forward direction
+                # Subtract the old chain's length that is touching the slot in the backward direction
                 if chainLenF in range(1, 5):
                     chainsP[chainLenF - 1] -= 1  # 1 <= length <= 4
                 else:
                     chainsP[3] -= 4 * (chainLenF - 3)  # length > 4
-            # Touching piece of the opponent
+            # Touching piece is an opponent piece
             elif slot == pieceO:
-                # The proponent chain stops with boundary of opponent piece
+                # The current proponent chain stops with boundary of opponent piece
                 boundaryB = pieceO
                 # Count the chain length of the opponent
                 chainO = 0

@@ -1,6 +1,8 @@
 from PyQt5.QtWidgets import QDialog, QGridLayout, QPushButton, QLabel
 import MinimaxTree_GUI
 from Node import Node
+from LogicalInterface import LogicalInterface
+import time
 
 ROWS = 6
 COLS = 7
@@ -16,9 +18,10 @@ graph_nodes = [
 
 
 class Connect4Grid(QDialog):
-    def __init__(self):
-        super().__init__()
 
+    def __init__(self, logicalInterface: LogicalInterface):
+        super().__init__()
+        self.logicalInterface = logicalInterface
         self.setWindowTitle("Connect4 Grid")
         self.setGeometry(200, 200, 400, 400)
         self.move(850, 200)
@@ -60,13 +63,23 @@ class Connect4Grid(QDialog):
         self.setLayout(layout)
 
     def on_button_click(self, col):
-        self.update_labels(col)
-        print(f"Button clicked in column {col}")
+        self.logicalInterface.userMove(col)
+        self.update_labels()
+        print(f"Button clicked in column {col}.")
+        # Check for ending
+        time.sleep(1)
+        self.logicalInterface.computerMove()
+        self.update_labels()
+        print(f"Computer played its turn.")
+        # Check for ending
 
     ##### kda di na2sha bs t7dd turns w row da elmafrod a5od mn back eli hwa
     ##### max limit 5las eli ba2i
-    def update_labels(self, col):
-        self.labels[0][col - 1].setStyleSheet("background-color: red; border-radius: 25px;")
+    def update_labels(self):
+        colors = self.logicalInterface.getStateColors()
+        for i in range(ROWS):
+            for j in range(COLS):
+               self.labels[i][j].setStyleSheet(f"background-color: {colors[i][j]}; border-radius: 25px;")
 
     def on_view_tree_click(self):
         if self.connect4_tree_window is None:

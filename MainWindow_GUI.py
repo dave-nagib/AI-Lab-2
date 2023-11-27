@@ -2,7 +2,7 @@ import sys
 
 from PyQt5.QtGui import QIntValidator
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QGridLayout, QDialog, QLabel, QLineEdit
-
+from LogicalInterface import LogicalInterface
 from Connect4_GUI import Connect4Grid
 from MiniMax import MiniMax
 from MiniMaxWithPruning import MiniMaxWithPruning
@@ -81,8 +81,7 @@ class MainWindow(QWidget):
         label_text = self.button1.text()
         ##### 4of lo 3aiz t3ml answer manager
         ##### tdilo label_text w k value w hwa eli y3ml call
-        minimax = MiniMax(2, self.k)
-        connect4_grid = Connect4Grid()
+        connect4_grid = Connect4Grid(LogicalInterface(mmdepth = self.k, pruning = False))
         connect4_grid.exec_()
 
     def button2_clicked(self):
@@ -94,7 +93,7 @@ class MainWindow(QWidget):
 
         label_text = self.button2.text()
         print(label_text)
-        connect4_grid = Connect4Grid()
+        connect4_grid = Connect4Grid(LogicalInterface(mmdepth = self.k, pruning = False))
         connect4_grid.exec_()
 
 

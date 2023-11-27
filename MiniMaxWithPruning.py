@@ -2,14 +2,14 @@ import math
 
 
 class MiniMaxWithPruning:
-    def __init__(self, playerValue, maxTreeDepth):
+    def __init__(self, maxTreeDepth):
         self.agentFunction = self.get_next_max_State
-        self.player = playerValue
+        # self.player = playerValue
         self.maxTreeDepth = maxTreeDepth
 
-    def __init__(self, is_minimizer, playerValue, maxTreeDepth):
+    def __init__(self, is_minimizer, maxTreeDepth):
         self.agentFunction = self.get_next_min_State if is_minimizer else self.get_next_max_State
-        self.player = playerValue
+        # self.player = playerValue
         self.maxTreeDepth = maxTreeDepth
 
     def get_next_state(self, state):

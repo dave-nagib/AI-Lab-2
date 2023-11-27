@@ -6,9 +6,9 @@ from State import State
 
 
 class MiniMax:
-    def __init__(self, playerValue: int, maxTreeDepth: int):
+    def __init__(self, maxTreeDepth: int):
         self.agentFunction = self.get_next_min_State
-        self.player = playerValue
+        # self.player = playerValue
         self.maxTreeDepth = maxTreeDepth
         self.minimaxTree = None
 
