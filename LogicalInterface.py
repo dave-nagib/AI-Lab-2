@@ -10,8 +10,7 @@ class LogicalInterface:
 
     def __init__(self, mmdepth: int, pruning: bool):
         self.__currState = State('0'*(ROWS*COLS), [0]*4, [0]*4, 1)
-        # self.__algorithm = MiniMaxWithPruning(True, mmdepth) if pruning else MiniMax(mmdepth)
-        self.__algorithm = MiniMax(mmdepth)
+        self.__algorithm = MiniMaxWithPruning(True, mmdepth) if pruning else MiniMax(mmdepth)
 
     def getStateColors(self):
         colors: list[list[str]] = []

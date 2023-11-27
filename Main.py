@@ -1,3 +1,4 @@
+from MiniMaxWithPruning import MiniMaxWithPruning
 from MiniMax import MiniMax
 from State import State
 
@@ -8,7 +9,8 @@ initialBoard = '0' * 42
 state = State(initialBoard, [0] * 4, [0] * 4, 1)
 k = int(input("Enter Max Tree Depth: "))
 
-minimax = MiniMax(2, k)
+minimax = MiniMaxWithPruning(k)
+mm = MiniMax(k)
 
 while True:
     state.print_connect_4_board()
@@ -17,6 +19,9 @@ while True:
     print()
     state.print_connect_4_board()
     print()
-    state = minimax.get_next_state(state)
+    state1 = minimax.get_next_state(state)
     minimax.getMiniMaxTree()
+    mm.get_next_state(state)
+    mm.getMiniMaxTree()
+    state = state1
     
