@@ -10,7 +10,9 @@ class LogicalInterface:
 
     def __init__(self, mmdepth: int, pruning: bool):
         self.__currState = State('0'*(ROWS*COLS), [0]*4, [0]*4, 1)
-        self.__algorithm = MiniMaxWithPruning(True, mmdepth) if pruning else MiniMax(mmdepth)
+        self.__algorithm = MiniMaxWithPruning(mmdepth) if pruning else MiniMax(mmdepth)
+        self.__totalTime = 0
+        self.__totalTurns = 0
 
     def getStateColors(self):
         colors: list[list[str]] = []
@@ -38,4 +40,10 @@ class LogicalInterface:
         start = time.time()
         self.__currState = self.__algorithm.get_next_state(self.__currState)
         end = time.time()
-        print(f'Time taken for AI\'s turn is {end-start} seconds.')
+        self.__totalTurns += 1
+        self.__totalTime += (end-start)
+        print(f'Time taken for AI\'s turn no.{self.__totalTurns} is {end-start:.4f} seconds. \nAverage turn time is {self.__totalTime/self.__totalTurns:.4f} seconds.')
+        self.logDecisionTree()
+
+    def logDecisionTree(self):
+        self.__algorithm.getMiniMaxTree()

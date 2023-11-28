@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QDialog, QGridLayout, QPushButton, QLabel
+from PyQt5.QtCore import QTimer
 import MinimaxTree_GUI
 from Node import Node
 from LogicalInterface import LogicalInterface
@@ -23,8 +24,8 @@ class Connect4Grid(QDialog):
         super().__init__()
         self.logicalInterface = logicalInterface
         self.setWindowTitle("Connect4 Grid")
-        self.setGeometry(200, 200, 400, 400)
-        self.move(850, 200)
+        self.setGeometry(500, 500, 1000, 800)
+        self.move(1700, 400)
         self.init_ui()
         self.connect4_tree_window = None  # Store a reference to the Connect4MinimaxTreeWindow
 
@@ -65,12 +66,11 @@ class Connect4Grid(QDialog):
     def on_button_click(self, col):
         self.logicalInterface.userMove(col)
         self.update_labels()
-        print(f"Button clicked in column {col}.")
+        print(f"User clicked button of column {col}.")
         # Check for ending
-        time.sleep(1)
         self.logicalInterface.computerMove()
         self.update_labels()
-        print(f"Computer played its turn.")
+        print(f"Computer finished its turn.\n\n")
         # Check for ending
 
     ##### kda di na2sha bs t7dd turns w row da elmafrod a5od mn back eli hwa
