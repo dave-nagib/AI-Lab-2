@@ -15,6 +15,10 @@ class State:
 
     def get_utility(self):
         return self.__chains1[3] - self.__chains2[3]
+    
+    def get_complete_chains(self):
+        return self.__chains1[3], self.__chains2[3]
+
 
     def get_slot(self,i,j):
         if i*COLS+j in range(0, ROWS*COLS):
@@ -30,7 +34,9 @@ class State:
         if row == -1: return None
         # Get the new state's string
         newBoard = self.__board[: row * COLS + col] + str(self.__nextTurn) + self.__board[row * COLS + col + 1:]
-        newState = State(newBoard, self.__chains1.copy(), self.__chains2.copy(), 3 - self.__nextTurn)
+        chains1copy = [self.__chains1[i] for i in range(4)]
+        chains2copy = [self.__chains2[i] for i in range(4)]
+        newState = State(newBoard, chains1copy, chains2copy, 3 - self.__nextTurn)
         # Update chain counts of each player
         newState.__update_chains(row, col, str(self.__nextTurn))
         return newState
@@ -79,7 +85,7 @@ class State:
                 if (chainLenF in range(1, 5)):
                     chainsP[chainLenF - 1] -= 1  # 1 <= length <= 4
                 else:
-                    chainsP[3] -= 4 * (chainLenF - 3)  # length > 4
+                    chainsP[3] -= (chainLenF - 3)  # length > 4
             # Touching piece is an oponent piece
             elif slot == pieceO:
                 # The current proponent chain stops with boundary of opponent piece
@@ -107,16 +113,16 @@ class State:
             if slot == pieceP:
                 # Count the chain length of the proponent
                 while slot == pieceP:
-                    chainLenF += 1
+                    chainLenB += 1
                     row, col = row - offsetRow, col - offsetCol
                     slot = self.get_slot(row, col)
                 # Remember the boundary on which we stopped
                 boundaryB = slot
                 # Subtract the old chain's length that is touching the slot in the backward direction
-                if chainLenF in range(1, 5):
-                    chainsP[chainLenF - 1] -= 1  # 1 <= length <= 4
+                if chainLenB in range(1, 5):
+                    chainsP[chainLenB - 1] -= 1  # 1 <= length <= 4
                 else:
-                    chainsP[3] -= 4 * (chainLenF - 3)  # length > 4
+                    chainsP[3] -= (chainLenB - 3)  # length > 4
             # Touching piece is an opponent piece
             elif slot == pieceO:
                 # The current proponent chain stops with boundary of opponent piece
@@ -143,13 +149,15 @@ class State:
             if (newChainLen in range(1, 5)):
                 chainsP[newChainLen - 1] += 1
             elif (newChainLen >= 5):
-                chainsP[3] += 4 * (newChainLen - 3)
+                chainsP[3] += (newChainLen - 3)
 
     def get_heuristic(self):
         h = 0
-        for i in range(1, 4):
+        for i in range(1, 3):
             h += pow(2,(i + 1)) * self.__chains1[i]
             h -= pow(2,(i + 1)) * self.__chains2[i]
+        h += 100*self.__chains1[3]
+        h -= 100*self.__chains2[3]
         return h
 
     def print_connect_4_board(self):

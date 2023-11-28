@@ -64,14 +64,23 @@ class Connect4Grid(QDialog):
         self.setLayout(layout)
 
     def on_button_click(self, col):
-        self.logicalInterface.userMove(col)
-        self.update_labels()
-        print(f"User clicked button of column {col}.")
-        # Check for ending
-        self.logicalInterface.computerMove()
-        self.update_labels()
-        print(f"Computer finished its turn.\n\n")
-        # Check for ending
+        if self.logicalInterface.userMove(col):
+            self.update_labels()
+            print(f"User clicked button of column {col}.")
+            self.logicalInterface.logResults()
+            # Check for end
+            # if self.logicalInterface.gameComplete():
+            #     self.logicalInterface.logResults()
+            #     return
+            self.logicalInterface.computerMove()
+            self.update_labels()
+            print(f"Computer finished its turn.\n\n")
+            self.logicalInterface.logResults()
+            # Check for end
+            # if self.logicalInterface.gameComplete():
+            #     self.logicalInterface.logResults()
+        else:
+            print("Full column, cannot place piece.\n\n")
 
     ##### kda di na2sha bs t7dd turns w row da elmafrod a5od mn back eli hwa
     ##### max limit 5las eli ba2i

@@ -111,7 +111,7 @@ class MiniMax:
         self.__file.write("|   " * (level-1) + "|___")
         self.__file.write(str(node.value) + '\n')
 
-        if len(node.children[0].children) == 0:
+        if len(node.children) > 0 and len(node.children[0].children) == 0:
             self.__file.write("|   " * (level) + "|___")
             for child in node.children:
                 self.__file.write(str(child.value) + " ")
