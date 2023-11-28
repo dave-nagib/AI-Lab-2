@@ -39,16 +39,21 @@ class MiniMaxWithPruning:
         minState = None
         self.minimaxTree = Node(randint(1, 10000), 0, [])
 
+        alpha = float('-inf')
+        beta = float('inf')
+
         for successor in successors:
             successorNode = Node(randint(1, 10000), 'x', [])
             self.minimaxTree.children.append(successorNode)
     
-        for i in range(7):
-            successorNodeMaxValue = self.max_value(successors[i], self.maxTreeDepth, self.minimaxTree.children[i], float('-inf'), float('inf'))
+        for i in range(len(successors)):
+            successorNodeMaxValue = self.max_value(successors[i], self.maxTreeDepth, self.minimaxTree.children[i], alpha, beta)
 
             if successorNodeMaxValue < minStateValue:
                 minState = successors[i]
                 minStateValue = successorNodeMaxValue
+                
+            beta = min(beta, minStateValue)
 
         self.minimaxTree.value = minStateValue
         return minState
