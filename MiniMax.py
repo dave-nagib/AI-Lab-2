@@ -58,14 +58,14 @@ class MiniMax:
     def max_value(self, state: State, level: int, maximizerNode: Node):
         maximizerNode.value = float('-inf')
 
-        if level == 0:
-            maximizerNode.value = state.get_heuristic()
-            return maximizerNode.value
-
         successors = state.get_neighbors()
 
         if len(successors) == 0:
             maximizerNode.value = state.get_utility()
+            return maximizerNode.value
+        elif level == 0:
+            maximizerNode.value = state.get_heuristic()
+            return maximizerNode.value
 
         tempValue = maximizerNode.value
         for successor in successors:
@@ -81,14 +81,14 @@ class MiniMax:
     def min_value(self, state: State, level: int, minimzerNode: Node):
         minimzerNode.value = float('inf')
 
-        if level == 0:
-            minimzerNode.value = state.get_heuristic()
-            return minimzerNode.value
-
         successors = state.get_neighbors()
 
         if len(successors) == 0:
             minimzerNode.value = state.get_utility()
+            return minimzerNode.value
+        elif level == 0:
+            minimzerNode.value = state.get_heuristic()
+            return minimzerNode.value
 
         tempValue = minimzerNode.value
         for successor in successors:

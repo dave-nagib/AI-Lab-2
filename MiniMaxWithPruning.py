@@ -62,14 +62,14 @@ class MiniMaxWithPruning:
     def max_value(self, state: State, level: int, maximizerNode: Node, alpha, beta):
         maximizerNode.value = float('-inf')
 
-        if level == 0:
-            maximizerNode.value = state.get_heuristic()
-            return maximizerNode.value
-
         successors = state.get_neighbors()
 
         if len(successors) == 0:
             maximizerNode.value = state.get_utility()
+            return maximizerNode.value
+        elif level == 0:
+            maximizerNode.value = state.get_heuristic()
+            return maximizerNode.value
 
         for i in range(len(successors)):
             maximizerNode.children.append(Node(randint(1, 10000), 'x', []))
@@ -89,14 +89,14 @@ class MiniMaxWithPruning:
     def min_value(self, state: State, level: int, minimzerNode: Node, alpha, beta):
         minimzerNode.value = float('inf')
 
-        if level == 0:
-            minimzerNode.value = state.get_heuristic()
-            return minimzerNode.value
-
         successors = state.get_neighbors()
 
         if len(successors) == 0:
             minimzerNode.value = state.get_utility()
+            return minimzerNode.value
+        elif level == 0:
+            minimzerNode.value = state.get_heuristic()
+            return minimzerNode.value
 
         for i in range(len(successors)):
             minimzerNode.children.append(Node(randint(1, 10000), 'x', []))

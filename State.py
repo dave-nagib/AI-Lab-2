@@ -14,7 +14,12 @@ class State:
         return self.__board
 
     def get_utility(self):
-        return self.__chains1[3] - self.__chains2[3]
+        if self.__chains1[3] > self.__chains2[3]:
+            return 100000
+        elif self.__chains1[3] < self.__chains2[3]:
+            return -100000
+        else:
+            return 0
     
     def get_complete_chains(self):
         return self.__chains1[3], self.__chains2[3]
@@ -47,6 +52,9 @@ class State:
             neighbor = self.move_state(choice)
             if neighbor: neighbors.append(neighbor)
         return neighbors
+
+    def logFromState(self, msg: str):
+        print(f'State {id(self)} : {msg}')
 
     def __update_chains(self, x: int, y: int, pieceP: str):
 
@@ -84,7 +92,7 @@ class State:
                 # Subtract the old chain's length that is touching the slot in the forward direction
                 if (chainLenF in range(1, 5)):
                     chainsP[chainLenF - 1] -= 1  # 1 <= length <= 4
-                else:
+                elif chainLenF > 4:
                     chainsP[3] -= (chainLenF - 3)  # length > 4
             # Touching piece is an oponent piece
             elif slot == pieceO:
@@ -98,7 +106,7 @@ class State:
                     slot = self.get_slot(row, col)
                 # If the chain length < 4 and the other side of the chain is blocked,
                 # this chain is taken out of the opponents chain list.
-                if chainO < 4 and (slot is None or slot == pieceP):
+                if chainO in range(1,4) and (slot is None or slot == pieceP):
                     chainsO[chainO - 1] -= 1
             # Touching an empty space or a board end
             else:
@@ -121,7 +129,7 @@ class State:
                 # Subtract the old chain's length that is touching the slot in the backward direction
                 if chainLenB in range(1, 5):
                     chainsP[chainLenB - 1] -= 1  # 1 <= length <= 4
-                else:
+                elif chainLenB > 4:
                     chainsP[3] -= (chainLenB - 3)  # length > 4
             # Touching piece is an opponent piece
             elif slot == pieceO:
@@ -135,7 +143,7 @@ class State:
                     slot = self.get_slot(row, col)
                 # If the chain length < 4 and the other side of the chain is blocked,
                 # this chain is taken out of the opponents chain list.
-                if chainO < 4 and (slot is None or slot == pieceP):
+                if chainO in range(1,4) and (slot is None or slot == pieceP):
                     chainsO[chainO - 1] -= 1
             # Touching an empty space or a board end
             else:
@@ -146,9 +154,9 @@ class State:
             if newChainLen < 4 and (boundaryF == pieceO or boundaryF is None) and (
                     boundaryB == pieceO or boundaryB is None): continue
             # Add the new chain length to the chains otherwise
-            if (newChainLen in range(1, 5)):
+            if newChainLen in range(1, 5):
                 chainsP[newChainLen - 1] += 1
-            elif (newChainLen >= 5):
+            elif newChainLen >= 5:
                 chainsP[3] += (newChainLen - 3)
 
     def get_heuristic(self):
