@@ -31,8 +31,8 @@ class MainWindow(QWidget):
 
         # Setting up the window properties
         self.setWindowTitle("Main Window")
-        self.setGeometry(100, 100, 300, 200)
-        self.move(900, 300)
+        self.setGeometry(200, 200, 600, 400)
+        self.move(1800, 600)
 
         # Creating the buttons and labels
         self.button1 = QPushButton("MiniMax")
@@ -93,7 +93,7 @@ class MainWindow(QWidget):
 
         label_text = self.button2.text()
         print(label_text)
-        connect4_grid = Connect4Grid(LogicalInterface(mmdepth = self.k, pruning = False))
+        connect4_grid = Connect4Grid(LogicalInterface(mmdepth = self.k, pruning = True))
         connect4_grid.exec_()
 
 
