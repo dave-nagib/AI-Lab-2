@@ -24,7 +24,7 @@ class Connect4Grid(QDialog):
         super().__init__()
         self.logicalInterface = logicalInterface
         self.setWindowTitle("Connect4 Grid")
-        self.setGeometry(600, 100, 650, 600)
+        self.setGeometry(680, 100, 650, 600)
         self.init_ui()
         self.connect4_tree_window = None  # Store a reference to the Connect4MinimaxTreeWindow
 
