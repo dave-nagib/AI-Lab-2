@@ -32,7 +32,7 @@ class MainWindow(QWidget):
         # Setting up the window properties
         self.setWindowTitle("Main Window")
         self.setGeometry(200, 200, 600, 400)
-        self.move(1800, 600)
+        self.move(700, 200)
 
         # Creating the buttons and labels
         self.button1 = QPushButton("MiniMax")
@@ -79,8 +79,7 @@ class MainWindow(QWidget):
         Saves the label of button1 as a string and opens the Connect4Window.
         """
         label_text = self.button1.text()
-        ##### 4of lo 3aiz t3ml answer manager
-        ##### tdilo label_text w k value w hwa eli y3ml call
+        print(label_text)
         connect4_grid = Connect4Grid(LogicalInterface(mmdepth = self.k, pruning = False))
         connect4_grid.exec_()
 
