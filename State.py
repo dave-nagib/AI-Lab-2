@@ -26,7 +26,7 @@ class State:
 
 
     def get_slot(self,i,j):
-        if i*COLS+j in range(0, ROWS*COLS):
+        if i>-1 and i<ROWS and j>-1 and j<COLS:
             return self.__board[i*COLS+j]
         else:
             return None

@@ -67,18 +67,18 @@ class Connect4Grid(QDialog):
         if self.logicalInterface.userMove(col):
             self.update_labels()
             print(f"User clicked button of column {col}.")
-            self.logicalInterface.logResults()
+            self.logicalInterface.logScores()
             # Check for end
-            # if self.logicalInterface.gameComplete():
-            #     self.logicalInterface.logResults()
-            #     return
+            if self.logicalInterface.gameComplete():
+                self.logicalInterface.logResults()
+                return
             self.logicalInterface.computerMove()
             self.update_labels()
             print(f"Computer finished its turn.\n\n")
-            self.logicalInterface.logResults()
+            self.logicalInterface.logScores()
             # Check for end
-            # if self.logicalInterface.gameComplete():
-            #     self.logicalInterface.logResults()
+            if self.logicalInterface.gameComplete():
+                self.logicalInterface.logResults()
         else:
             print("Full column, cannot place piece.\n\n")
 

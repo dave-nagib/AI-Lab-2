@@ -33,15 +33,18 @@ class LogicalInterface:
             if self.__currState.get_slot(0,j) == '0': return False
         return True
 
-    def logResults(self):
+    def logScores(self):
         chains1,chains2 = self.__currState.get_complete_chains()
         print(f'Player 1 score so far = {chains1}\nPlayer 2 score so far = {chains2}\n')
-        # if chains1 > chains2:
-        #     print("Player 1 has won!\n")
-        # elif chains1 < chains2:
-        #     print("Player 2 has won!\n")
-        # else:
-        #     print("It's a draw!")
+
+    def logResults(self):
+        chains1, chains2 = self.__currState.get_complete_chains()
+        if chains1 > chains2:
+            print("Player 1 has won!\n")
+        elif chains1 < chains2:
+            print("Player 2 has won!\n")
+        else:
+            print("It's a draw!")
 
     def userMove(self, col: int) -> bool:
         nextState = self.__currState.move_state(col-1)
